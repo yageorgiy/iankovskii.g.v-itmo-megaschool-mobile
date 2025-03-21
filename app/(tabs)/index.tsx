@@ -38,9 +38,9 @@ export default function HomeScreen() {
   const [dataOil,     setDataOil]     = useState([]);
   const [dataMoney,   setDataMoney]   = useState([]);
 
-  const [dataEnergyLoading, setDataEnergyLoading] = useState(false);
-  const [dataOilLoading,    setDataOilLoading]    = useState(false);
-  const [dataMoneyLoading,  setDataMoneyLoading]  = useState(false);
+  const [dataEnergyLoading, setDataEnergyLoading] = useState(true);
+  const [dataOilLoading,    setDataOilLoading]    = useState(true);
+  const [dataMoneyLoading,  setDataMoneyLoading]  = useState(true);
 
   useEffect(() => {
     getNews("energy", setDataEnergy,  setDataEnergyLoading);
@@ -51,7 +51,10 @@ export default function HomeScreen() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        <SectionList
+        {
+          (dataEnergyLoading || dataOilLoading || dataMoneyLoading) ?
+          <ThemedText style={styles.title} type="title">Loading...</ThemedText> :
+          <SectionList
           sections={[
             {
               title: 'Energy',
@@ -77,7 +80,8 @@ export default function HomeScreen() {
             </ThemedText>
           )}
         />
-
+          
+        }
       </SafeAreaView>
     </SafeAreaProvider>
     // <ParallaxScrollView

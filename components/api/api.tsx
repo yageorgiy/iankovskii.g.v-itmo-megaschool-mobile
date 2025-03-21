@@ -10,6 +10,7 @@ const extractDocuments = async (data: any) => {
 
 export const getNews = async (term: string, setData: any, setLoading: any) => {
   try {
+    setLoading(true);
     console.log("Requesting...");
     const response = await fetch(
         `${MOUNTPOINT}/wds?format=json&qterm=${term}&display_title=water&fl=display_title&rows=4&os=20`, 
