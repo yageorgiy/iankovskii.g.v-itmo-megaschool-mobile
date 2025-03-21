@@ -1,4 +1,4 @@
-import { StyleSheet, Image, Platform } from 'react-native';
+import { StyleSheet, Image, Platform, TouchableOpacity, TextInput, Alert } from 'react-native';
 
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
@@ -6,6 +6,103 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import React, { FC, ReactElement, useState } from 'react';
+import { useNavigation } from 'expo-router';
+import { useThemeColor } from '@/hooks/useThemeColor';
+
+export const UserRegistration: FC<{}> = ({}): ReactElement => {
+  const navigation = useNavigation();
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const color = useThemeColor({ light: '#000000', dark: '#FFFFFF' }, 'text');
+  const color1 = useThemeColor({ light: '#222222', dark: '#DDDDDD' }, 'text');
+
+  const Styles = {
+    login_wrapper: {
+      marginTop: 8,
+      marginBottom: 8
+    },
+    form_input: {
+      height: 32,
+      color: color,
+      borderColor: color1,
+      borderWidth: 1,
+      marginBottom: 8
+    },
+    form: {},
+    button: {},
+    button_label: {},
+  };
+
+
+
+  const doUserSignUp = async function () {
+    // Note that these values come from state variables that we've declared before
+    const usernameValue: string = username;
+    const passwordValue: string = password;
+    
+    if(usernameValue === ""){
+      const message = `Username field is empty!`;
+      // TODO: reduce duplication
+      Platform.OS === "web" ? alert(message) : Alert.alert(
+        'Error!',
+        message,
+      );
+      return;
+    }
+
+    if(passwordValue === ""){
+      const message = `Password field is empty!`;
+      // TODO: reduce duplication
+      Platform.OS === "web" ? alert(message) : Alert.alert(
+        'Error!',
+        message,
+      );
+      return;
+    }
+
+
+    const message = `User ${usernameValue} was successfully created!`
+    // TODO: reduce duplication
+    Platform.OS === "web" ? alert(message) : Alert.alert(
+      'Success!',
+      message,
+    );
+    // navigation.navigate('Home');
+  };
+
+  return (
+    <ThemedView style={Styles.login_wrapper}>
+      <ThemedView style={Styles.form}>
+        <TextInput
+          style={Styles.form_input}
+          value={username}
+          placeholder={'Username'}
+          onChangeText={(text) => setUsername(text)}
+          autoCapitalize={'none'}
+          keyboardType={'email-address'}
+        />
+        <TextInput
+          style={Styles.form_input}
+          value={password}
+          placeholder={'Password'}
+          secureTextEntry
+          onChangeText={(text) => setPassword(text)}
+        />
+        <TouchableOpacity onPress={() => doUserSignUp()}>
+          <ThemedView style={Styles.button}>
+            <ThemedText style={Styles.button_label}>{'Log in'}</ThemedText>
+          </ThemedView>
+        </TouchableOpacity>
+      </ThemedView>
+    </ThemedView>
+  );
+};
+
+
+
 
 export default function TabTwoScreen() {
   return (
@@ -20,77 +117,10 @@ export default function TabTwoScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
+        <ThemedText type="title">Login</ThemedText>
       </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image source={require('@/assets/images/react-logo.png')} style={{ alignSelf: 'center' }} />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText> to see how to load{' '}
-          <ThemedText style={{ fontFamily: 'SpaceMono' }}>
-            custom fonts such as this one.
-          </ThemedText>
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user's current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful <ThemedText type="defaultSemiBold">react-native-reanimated</ThemedText>{' '}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
+      <ThemedText>Use your account credentials to log in.</ThemedText>
+      <UserRegistration></UserRegistration>
     </ParallaxScrollView>
   );
 }
