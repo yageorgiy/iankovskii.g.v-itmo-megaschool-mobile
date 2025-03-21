@@ -8,9 +8,10 @@ const extractDocuments = async (data: any) => {
     });
 };
 
-export const getNews = async (term: string, setData: any, setLoading: any) => {
+export const getNews = async (term: string, setData: any, setLoading: any, setHasError: any) => {
   try {
     setLoading(true);
+    setHasError(false);
     console.log("Requesting...");
     const response = await fetch(
         `${MOUNTPOINT}/wds?format=json&qterm=${term}&display_title=water&fl=display_title&rows=4&os=20`, 
@@ -19,6 +20,7 @@ export const getNews = async (term: string, setData: any, setLoading: any) => {
     
     setData(json);
   } catch (error) {
+    setHasError(true);
     console.error(error);
 
     const fallbackData = {

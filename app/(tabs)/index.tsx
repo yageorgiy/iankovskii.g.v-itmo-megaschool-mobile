@@ -41,16 +41,23 @@ export default function HomeScreen() {
   const [dataEnergyLoading, setDataEnergyLoading] = useState(true);
   const [dataOilLoading,    setDataOilLoading]    = useState(true);
   const [dataMoneyLoading,  setDataMoneyLoading]  = useState(true);
+  
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    getNews("energy", setDataEnergy,  setDataEnergyLoading);
-    getNews("oil",    setDataOil,     setDataOilLoading);
-    getNews("money",  setDataMoney,   setDataMoneyLoading);
+    getNews("energy", setDataEnergy,  setDataEnergyLoading, setHasError);
+    getNews("oil",    setDataOil,     setDataOilLoading,    setHasError);
+    getNews("money",  setDataMoney,   setDataMoneyLoading,  setHasError);
   }, []);
   
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
+        {
+          (hasError) ? <ThemedText style={styles.error} type="title">
+            Could not load articles from remote server!
+          </ThemedText> : <></>
+        }
         {
           (dataEnergyLoading || dataOilLoading || dataMoneyLoading) ?
           <ThemedText style={styles.title} type="title">Loading...</ThemedText> :
@@ -168,6 +175,15 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 8,
+    textAlign: 'center',
+  },
+  error: {
+    fontSize: 32,
+    color: 'red',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
